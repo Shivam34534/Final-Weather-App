@@ -9,7 +9,9 @@ dotenv.config();
 
 const app = express();
 app.use(express.json());
-app.use(cors());
+
+const CLIENT_URL = process.env.CLIENT_URL || '*';
+app.use(cors({ origin: CLIENT_URL }));
 
 // Routes
 app.get('/', (req, res) => {
