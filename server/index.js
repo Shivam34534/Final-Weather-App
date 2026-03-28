@@ -10,8 +10,21 @@ dotenv.config();
 const app = express();
 app.use(express.json());
 
-const CLIENT_URL = process.env.CLIENT_URL || '*';
-app.use(cors({ origin: CLIENT_URL }));
+const CLIENT_URL = process.env.CLIENT_URL || 'http://localhost:5173';
+const ALLOWED_ORIGINS = [
+  CLIENT_URL,
+  'https://weather-app-frontend-dno2.onrender.com'
+];
+
+app.use(cors({
+  origin: (origin, callback) => {
+    if (!origin || ALLOWED_ORIGINS.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error(`CORS policy error: Origin ${origin} not allowed`));
+    }
+  }
+}));
 
 // Routes
 app.get('/', (req, res) => {
