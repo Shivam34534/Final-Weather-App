@@ -10,7 +10,6 @@ dotenv.config();
 const app = express();
 app.use(express.json());
 
-const CLIENT_URL = process.env.CLIENT_URL || 'http://localhost:5173';
 const ALLOWED_ORIGINS = [
   CLIENT_URL,
   'https://weather-app-frontend-dno2.onrender.com'
