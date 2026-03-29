@@ -58,10 +58,30 @@ const Login = () => {
                     setPassword('');
                 }
             } else if (isSignUp) {
-                await import('../services/api').then(module => module.signup(name, email, password));
+                const res = await import('../services/api').then(module => module.signup(name, email, password));
+                if (res.user) {
+                    localStorage.setItem('userProfile', JSON.stringify({
+                        fullName: res.user.name,
+                        email: res.user.email,
+                        ...res.user
+                    }));
+                    if (res.user.settings) {
+                        localStorage.setItem('appSettings', JSON.stringify(res.user.settings));
+                    }
+                }
                 navigate('/weather');
             } else {
-                await import('../services/api').then(module => module.login(email, password));
+                const res = await import('../services/api').then(module => module.login(email, password));
+                if (res.user) {
+                    localStorage.setItem('userProfile', JSON.stringify({
+                        fullName: res.user.name,
+                        email: res.user.email,
+                        ...res.user
+                    }));
+                    if (res.user.settings) {
+                        localStorage.setItem('appSettings', JSON.stringify(res.user.settings));
+                    }
+                }
                 navigate('/weather');
             }
         } catch (err) {

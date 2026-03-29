@@ -20,34 +20,37 @@ const userSchema = new mongoose.Schema({
     },
     notifications: {
       severe: { type: Boolean, default: true },
-      nowcast: { type: Boolean, default: true }
+      nowcast: { type: Boolean, default: true },
+      summary: { type: String, default: 'morning' },
+      thresholds: {
+        uv: { type: Boolean, default: false },
+        freeze: { type: Boolean, default: true }
+      },
+      dnd: { type: Boolean, default: false }
+    },
+    data: {
+      provider: { type: String, default: 'open-meteo' },
+      updateFreq: { type: String, default: 'manual' },
+      bgRefresh: { type: Boolean, default: false }
     },
     appearance: {
       theme: { type: String, default: 'dark' },
-      dynamicBg: { type: Boolean, default: true }
+      dynamicBg: { type: Boolean, default: true },
+      iconParams: { type: String, default: 'default' }
     },
-    lifestyle: {
-      activities: {
-        running: { type: Boolean, default: true },
-        cycling: { type: Boolean, default: true },
-        driving: { type: Boolean, default: true },
-        lawn: { type: Boolean, default: true },
-        outdoor: { type: Boolean, default: true },
-        fishing: { type: Boolean, default: true },
-        sailing: { type: Boolean, default: true },
-        golf: { type: Boolean, default: true },
-        boating: { type: Boolean, default: true },
-        beach: { type: Boolean, default: true },
-        kite: { type: Boolean, default: true },
-        winter: { type: Boolean, default: true },
-        hiking: { type: Boolean, default: true },
-        astronomy: { type: Boolean, default: true }
-      },
+    privacy: {
+      locationAccess: { type: String, default: 'while-using' },
+      preciseLocation: { type: Boolean, default: true },
+      shareData: { type: Boolean, default: false }
+    },
+    health: {
       pollen: {
         tree: { type: Boolean, default: true },
         grass: { type: Boolean, default: true },
         ragweed: { type: Boolean, default: true }
-      }
+      },
+      activity: { type: String, default: 'default' },
+      haptic: { type: Boolean, default: true }
     }
   },
   history: [{

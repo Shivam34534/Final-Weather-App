@@ -11,8 +11,9 @@ const app = express();
 app.use(express.json());
 
 const ALLOWED_ORIGINS = [
-  CLIENT_URL,
-  'https://weather-app-frontend-dno2.onrender.com'
+  process.env.CLIENT_URL,
+  'https://weather-app-frontend-dno2.onrender.com',
+  'http://localhost:5173'
 ];
 
 app.use(cors({

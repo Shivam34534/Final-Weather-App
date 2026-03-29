@@ -120,14 +120,24 @@ const Dashboard = () => {
     };
 
     const fetchWeather = async (lat, lon, cityName) => {
+        // Fallback to current weather data if no arguments provided (for auto-refresh)
+        const targetLat = lat || weatherData_v5?.latitude;
+        const targetLon = lon || weatherData_v5?.longitude;
+        const targetName = cityName || weatherData_v5?.location;
+
+        if (!targetLat || !targetLon) {
+            console.log("No location provided for fetchWeather");
+            return;
+        }
+
         setIsLoading(true);
         setError(null);
         try {
             // Fetch Weather + Air Quality
-            const weatherUrl = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current=temperature_2m,relative_humidity_2m,apparent_temperature,is_day,precipitation,weather_code,cloud_cover,pressure_msl,surface_pressure,wind_speed_10m,wind_direction_10m,dew_point_2m,visibility&hourly=temperature_2m,weather_code,precipitation_probability,dew_point_2m,wind_speed_10m,pressure_msl,relative_humidity_2m&daily=weather_code,temperature_2m_max,temperature_2m_min,sunrise,sunset,uv_index_max,precipitation_probability_max&timezone=auto`;
+            const weatherUrl = `https://api.open-meteo.com/v1/forecast?latitude=${targetLat}&longitude=${targetLon}&current=temperature_2m,relative_humidity_2m,apparent_temperature,is_day,precipitation,weather_code,cloud_cover,pressure_msl,surface_pressure,wind_speed_10m,wind_direction_10m,dew_point_2m,visibility&hourly=temperature_2m,weather_code,precipitation_probability,dew_point_2m,wind_speed_10m,pressure_msl,relative_humidity_2m&daily=weather_code,temperature_2m_max,temperature_2m_min,sunrise,sunset,uv_index_max,precipitation_probability_max&timezone=auto`;
 
             // Air Quality API
-            const aqUrl = `https://air-quality-api.open-meteo.com/v1/air-quality?latitude=${lat}&longitude=${lon}&current=european_aqi,us_aqi,pm10,pm2_5,carbon_monoxide,nitrogen_dioxide,sulphur_dioxide,ozone`;
+            const aqUrl = `https://air-quality-api.open-meteo.com/v1/air-quality?latitude=${targetLat}&longitude=${targetLon}&current=european_aqi,us_aqi,pm10,pm2_5,carbon_monoxide,nitrogen_dioxide,sulphur_dioxide,ozone`;
 
             const [weatherRes, aqRes] = await Promise.all([
                 fetch(weatherUrl),
@@ -226,7 +236,7 @@ const Dashboard = () => {
 
 
             const combinedData = {
-                location: cityName,
+                location: targetName,
                 temperature: Math.round(currentTemp),
                 feelsLike: Math.round(feelsLike),
                 humidity: weatherData_v5Json.current.relative_humidity_2m,
